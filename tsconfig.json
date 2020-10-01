@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        // "allowJs": true,
+        "target": "es6",
+        "module": "commonjs",
+        "esModuleInterop": true, /* i added this */
+        "moduleResolution": "node",
+        "noImplicitAny": false, /* i changed to false for now */
+        "removeComments": false, /* DEFINITELY KEEP COMMENTS SINCE SOME OF THE APPS SCRIPTS NEED THE COMMENTS AT THE TOP (I.E. ONLYDOC STUFF) */
+        "preserveConstEnums": true,
+        /* had to comment this out "outFile": "dist/tsc.js",   i changed from "../../built/local/tsc.js" */
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "sourceMap": true,
+        "resolveJsonModule": true, /* i added this */
+        "baseUrl": "." /*,
+        "paths": {
+            "*": [
+                "node_modules/*",
+                "src/types/*"
+            ]
+        }
+        */
+    },
+    "include": [
+        "src/**/*"
+        // "tsconfig.json",
+        // "server.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}
