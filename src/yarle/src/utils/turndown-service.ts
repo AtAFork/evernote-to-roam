@@ -1,3 +1,4 @@
+/* eslint-disable no-ternary */
 import * as TurndownService from 'turndown';
 import { gfm } from 'joplin-turndown-plugin-gfm';
 
@@ -6,26 +7,23 @@ import { taskItemsRule } from './turndown-rules/task-items-rule';
 import { spanRule } from './turndown-rules/span';
 import { imagesRule } from './turndown-rules/images-rule';
 
+// eslint-disable-next-line import/prefer-default-export
 export const getTurndownService = () => {
-    /* istanbul ignore next */
-    const turndownService = new TurndownService({
-        br: '',
-        blankReplacement: (content: any, node: any) => {
-        return node.isBlock ? '\n\n' : '';
-        },
-        keepReplacement: (content: any, node: any) => {
-        return node.isBlock ? `\n${node.outerHTML}\n` : node.outerHTML;
-        },
-        defaultReplacement: (content: any, node: any) => {
-        return node.isBlock ? `\n${content}\n` : content;
-        },
-    });
+  /* istanbul ignore next */
+  // const turndownService = new TurndownService({
+  const turndownService = TurndownService.default({
 
-    turndownService.addRule('evernote task items', taskItemsRule);
-    turndownService.addRule('wikistyle links', wikiStyleLinksRule);
-    turndownService.addRule('images', imagesRule);
-    turndownService.addRule('span', spanRule);
-    turndownService.use(gfm);
+    br: '',
+    blankReplacement: (content: any, node: any) => (node.isBlock ? '\n\n' : ''),
+    keepReplacement: (content: any, node: any) => (node.isBlock ? `\n${node.outerHTML}\n` : node.outerHTML),
+    defaultReplacement: (content: any, node: any) => (node.isBlock ? `\n${content}\n` : content),
+  });
 
-    return turndownService;
+  turndownService.addRule('evernote task items', taskItemsRule);
+  turndownService.addRule('wikistyle links', wikiStyleLinksRule);
+  turndownService.addRule('images', imagesRule);
+  turndownService.addRule('span', spanRule);
+  turndownService.use(gfm);
+
+  return turndownService;
 };

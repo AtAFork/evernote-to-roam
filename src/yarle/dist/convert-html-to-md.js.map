@@ -1,0 +1,1 @@
+{"version":3,"file":"convert-html-to-md.js","sourceRoot":"","sources":["../src/convert-html-to-md.ts"],"names":[],"mappings":";;AAAA,+DAA8D;AAEjD,QAAA,cAAc,GAAG,CAAC,OAAe,EAAE,EAAE;IAC9C,MAAM,WAAW,GAAG,qCAAkB,EAAE,CAAC,QAAQ,CAAC,OAAO,CAAC,CAAC;IAE3D,OAAO,WAAW,IAAI,WAAW,KAAK,WAAW,CAAC,CAAC,CAAC,WAAW,CAAC,CAAC,CAAC,EAAE,CAAC;AACzE,CAAC,CAAC"}

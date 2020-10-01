@@ -1,19 +1,27 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// getComplexFilePath, getSimpleFilePath
+
+// @ts-ignore
+import * as fs from 'browserify-fs';
 import {
-  getComplexFilePath, getMetadata, getNoteContent, getSimpleFilePath, getTitle, isComplex, logTags, getNoteFileName,
+  getMetadata, getNoteContent, getTitle, isComplex, logTags, getNoteFileName,
 } from './utils';
 import { yarleOptions } from './yarle';
-// import { writeMdFile } from './utils/file-utils';
-import { processResources } from './process-resources';
+/*
+ * import { writeMdFile } from './utils/file-utils';
+ * import { processResources } from './process-resources';
+ */
+
 import { convertHtml2Md } from './convert-html-to-md';
 
 // eslint-disable-next-line import/prefer-default-export
-export const processNode = async (note: any): void => {
+export const processNode = async (note: any): Promise<void> => {
   const title = getTitle(note);
 
   console.log(`Converting note ${title}...`);
   try {
     let data = '';
-    let content = getNoteContent(note);
+    const content = getNoteContent(note);
     /*
      * const absFilePath = isComplex(note)
      *   ? getComplexFilePath(note)
@@ -25,7 +33,9 @@ export const processNode = async (note: any): void => {
       data += logTags(note);
     }
     if (isComplex(note)) {
-      content = processResources(note, content);
+      console.log('Failed to process, too complex');
+      return;
+      // content = processResources(note, content);
     }
 
     const markdown = convertHtml2Md(content);

@@ -1,4 +1,3 @@
-
 <script src="/assets/js/bundle.js"></script>
 <!-- <script src="{{ base.url | prepend: site.url }}/assets/bundle.js"></script> -->
 

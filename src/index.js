@@ -1,5 +1,5 @@
 // specifically referencing it here so i know i edited the source
-import yarle from './yarle/dist/yarle.js';
+import { dropTheRope } from './yarle/dist/yarle.js';
 
 const options = {
   /*
@@ -11,6 +11,6 @@ const options = {
   isZettelkastenNeeded: true,
   isMetadataNeeded: false,
 };
-yarle.dropTheRope(options);
+dropTheRope(options);
 
 console.log('hi there adam');

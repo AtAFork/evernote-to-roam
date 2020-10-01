@@ -1,0 +1,9 @@
+export declare const getMetadata: (note: any) => string;
+export declare const getTitle: (note: any) => string;
+export declare const logCreationTime: (note: any) => string;
+export declare const logUpdateTime: (note: any) => string;
+export declare const logLatLong: (note: any) => string;
+export declare const logTags: (note: any) => string;
+export declare const logSeparator: () => string;
+export declare const setFileDates: (path: string, note: any) => void;
+export declare const getTimeStampMoment: (resource: any) => any;

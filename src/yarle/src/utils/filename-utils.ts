@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-use-before-define */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable no-irregular-whitespace */
@@ -7,10 +8,15 @@
 /* eslint-disable no-ternary */
 /* eslint-disable no-useless-escape */
 /* eslint-disable prefer-named-capture-group */
-import * as fs from 'fs';
+
+// import * as fs from 'fs';
+
+// @ts-ignore
+import * as fs from 'browserify-fs';
+
 import * as moment from 'moment';
 
-import { yarleOptions } from '../yarle';
+// import { yarleOptions } from '../yarle';
 
 const FILENAME_LENGTH = 50;
 const FILENAME_DELIMITER = '_';
@@ -23,7 +29,7 @@ export const getFileIndex = async (dstPath: string, fileNamePrefix: string): Pro
 
   return index;
 };
-export const getResourceFileName = (workDir: string, resource: any) => {
+export const getResourceFileName = async (workDir: string, resource: any) => {
   const UNKNOWNFILENAME = 'unknown_filename';
 
   const extension = getExtension(resource);
@@ -35,7 +41,7 @@ export const getResourceFileName = (workDir: string, resource: any) => {
     fileName = fileNamePrefix.split('.')[0];
   }
 
-  const index = getFileIndex(workDir, fileName);
+  const index = await getFileIndex(workDir, fileName);
   const fileNameWithIndex = index > 0 ? `${fileName}.${index}` : fileName;
 
   return `${fileNameWithIndex}.${extension}`;

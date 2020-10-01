@@ -23,6 +23,7 @@
   "author": "Akos Balasko",
   "dependencies": {
     "@types/fs-extra": "8.1.0",
+    "browserify-fs": "^1.0.0",
     "chai": "4.2.0",
     "execSync": "1.0.2",
     "joplin-turndown-plugin-gfm": "1.0.12",
