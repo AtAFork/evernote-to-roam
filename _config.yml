@@ -32,6 +32,17 @@ plugins:
 
 # i sidestepped issues with iconv/node-expat etc by commenting out const XmlStream = require("xml-stream") [it wasn't actually required, maintainers commented out where it was used]
 
+# commented out folder-utils.ts and xml-parser-options
+# removed these dependencies
+    # // "fast-xml-parser": "3.12.5",
+    # // "fs-extra": "4.0.2",
+    # // "he": "1.2.0",
+    # "xml-stream": "^0.4.5"
+    
+# removed these dev dependencies
+    "@types/he": "1.1.1",
+
+
 # inside node module of yarle called  fs - extra: fs-extra / lib / index
 # // assign(fs, require('./copy'))
 # // assign(fs, require('./copy-sync'))
