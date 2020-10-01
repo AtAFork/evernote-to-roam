@@ -42,14 +42,44 @@ plugins:
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+
+
+# i sidestepped issues with iconv/node-expat etc by commenting out const XmlStream = require("xml-stream") [it wasn't actually required, maintainers commented out where it was used]
+
+# inside node module of yarle called  fs - extra: fs-extra / lib / index
+# // assign(fs, require('./copy'))
+# // assign(fs, require('./copy-sync'))
+# // assign(fs, require('./empty'))
+# // assign(fs, require('./ensure'))
+# // assign(fs, require('./fs'))
+# // assign(fs, require('./json'))
+# // assign(fs, require('./move'))
+# // assign(fs, require('./move-sync'))
+# // assign(fs, require('./output'))
+# // assign(fs, require('./path-exists'))
+# LEAVE UNCOMMENTED assign(fs, require('./mkdirs'))
+# LEAVE UNCOMMENTED assign(fs, require('./remove'))
+
+# i then commented out // const absFilePath = utils_1.isComplex(note) ? inside process-node.js inside yarle
+
+# the convert-html-to-md.js in dist/yarle has issue of "is not a constructor"
+
+# so to fix i rebuilt turndown by doing npm run build-cjs  (the browserify'd version), and replaced the turndown.js in the dist folder with the turndown.browser.cjs.js from the lib folder
+# and then in yarle/dist/utils/turndown-service.js changed `const turndownService = new TurndownService({})` to  `const turndownService = TurndownService.default({})`
+
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - yarle/
+  - vscode.code-workspace
+  - package.json
+  - package-lock.json
+  - webpack.config.js

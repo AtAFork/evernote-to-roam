@@ -1,0 +1,26 @@
+{
+  "name": "evernote-to-roam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AtAFork/evernote-to-roam.git"
+  },
+  "keywords": [],
+  "author": "Adam Tzagournis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AtAFork/evernote-to-roam/issues"
+  },
+  "homepage": "https://github.com/AtAFork/evernote-to-roam#readme",
+  "devDependencies": {
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
+  },
+  "dependencies": {}
+}
