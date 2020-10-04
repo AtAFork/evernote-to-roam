@@ -16,17 +16,40 @@ import * as fs from 'browserify-fs';
 
 import * as moment from 'moment';
 
+import * as util from 'util';
+
+const readdir = util.promisify(fs.readdir);
+const mkdir = util.promisify(fs.mkdir);
+
 // import { yarleOptions } from '../yarle';
 
 const FILENAME_LENGTH = 50;
 const FILENAME_DELIMITER = '_';
 
 export const getFileIndex = async (dstPath: string, fileNamePrefix: string): Promise<string | number> => {
-  const files = await fs.readdir(dstPath);
-  console.log('does it readdir properly?');
-  const index = files.filter((file: string | string[]) => file.indexOf(fileNamePrefix) > -1)
-    .length;
+  console.log(dstPath);
+  console.log(fileNamePrefix);
 
+  // !!!!!!!!!!! cannot read filter of undefined, print everything that is being passed to readdir
+
+  console.log('does it readdir properly?');
+
+  let index;
+  try {
+    await mkdir(dstPath);
+
+    const files = await readdir(dstPath);
+    // @ts-ignore
+    index = files.filter((file: string | string[]) => file.indexOf(fileNamePrefix) > -1)
+      .length;
+
+    console.log(`index all good: ${index}`);
+  } catch (error) {
+    console.log('hit an issue');
+    console.log(error);
+    index = 0;
+  }
+  console.log(`index ${index}`);
   return index;
 };
 export const getResourceFileName = async (workDir: string, resource: any) => {
@@ -40,6 +63,8 @@ export const getResourceFileName = async (workDir: string, resource: any) => {
 
     fileName = fileNamePrefix.split('.')[0];
   }
+
+  console.log(workDir, fileName);
 
   const index = await getFileIndex(workDir, fileName);
   const fileNameWithIndex = index > 0 ? `${fileName}.${index}` : fileName;
@@ -55,7 +80,7 @@ export const getFilePrefix = (note: any): string => {
 export const makeFilePrefixOsCompatible = (name: string): string => name.replace(/(\!|\.|\;|\:|\<|\>|\"|\\|\/|\||\*|\?)/g, FILENAME_DELIMITER);
 
 // eslint-disable-next-line require-await
-export const getNoteFileName = async (dstPath: string, note: any): Promise<string> => `${getNoteName(dstPath, note)}.md`;
+export const getNoteFileName = async (dstPath: string, note: any): Promise<string> => `${await getNoteName(dstPath, note)}.md`;
 
 export const getExtensionFromResourceFileName = (resource: any): string => {
   if (!(resource['resource-attributes']
@@ -102,10 +127,16 @@ export const getNoteName = async (dstPath: string, note: any): Promise<string> =
    * } else {
    */
   const fileNamePrefix = getFilePrefix(note);
+
+  console.log('in getnotename before getting file index');
+  console.log(dstPath, fileNamePrefix);
+
   const nextIndex = await getFileIndex(dstPath, fileNamePrefix);
 
   const noteName = nextIndex === 0 ? fileNamePrefix : `${fileNamePrefix}.${nextIndex}`;
   // }
+
+  console.log(`note name ${noteName}`);
 
   return noteName;
 };

@@ -12,10 +12,13 @@
 import * as flow from 'xml-flow';
 // @ts-ignore
 import * as fs from 'browserify-fs';
-
-// import * as utils from './utils';
+import * as util from 'util';
 import { YarleOptions } from './YarleOptions';
 import { processNode } from './process-node';
+
+// import * as utils from './utils';
+
+const writeFile = util.promisify(fs.writeFile);
 
 // import { xmlParserOptions } from './xml-parser.options';
 
@@ -51,9 +54,11 @@ export const parseStream = async (options: YarleOptions): Promise<void> => {
   let failed = 0;
   let totalNotes = 0;
 
-  const xmlStream = flow(stream);
+  const xmlStream = await flow(stream);
 
   return new Promise((resolve, reject) => {
+    console.log('inside return promise');
+
     const logAndReject = (error: Error) => {
       console.log(`Could not convert ${options.enexFile}:\n${error.message}`);
       // eslint-disable-next-line no-plusplus
@@ -106,11 +111,11 @@ export const dropTheRope = async (options: YarleOptions): Promise<void> => {
    */
 
   try {
-    await fs.writeFile('test/test2.enex', testDoc);
+    await writeFile('./test2.enex', testDoc);
     console.log('after await');
+    await parseStream(options);
   } catch (error) {
     console.log(error);
   }
-  await parseStream(options);
 };
 // tslint:enable:no-console

@@ -12,7 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const flow = require("xml-flow");
 // @ts-ignore
 const fs = require("browserify-fs");
+const util = require("util");
 const process_node_1 = require("./process-node");
+// import * as utils from './utils';
+const writeFile = util.promisify(fs.writeFile);
 // import { xmlParserOptions } from './xml-parser.options';
 // try to figure out how to write this to a file in the browserify-fs, and then read it in via the droptherope for purposes of testing (i'll have to figure out how to write to browserify fs anyway)
 const testDoc = `
@@ -42,8 +45,9 @@ exports.parseStream = async (options) => {
     let noteNumber = 0;
     let failed = 0;
     let totalNotes = 0;
-    const xmlStream = flow(stream);
+    const xmlStream = await flow(stream);
     return new Promise((resolve, reject) => {
+        console.log('inside return promise');
         const logAndReject = (error) => {
             console.log(`Could not convert ${options.enexFile}:\n${error.message}`);
             // eslint-disable-next-line no-plusplus
@@ -87,13 +91,13 @@ exports.dropTheRope = async (options) => {
      * utils.setPaths();
      */
     try {
-        await fs.writeFile('test/test2.enex', testDoc);
+        await writeFile('./test2.enex', testDoc);
         console.log('after await');
+        await exports.parseStream(options);
     }
     catch (error) {
         console.log(error);
     }
-    await exports.parseStream(options);
 };
 // tslint:enable:no-console
 //# sourceMappingURL=yarle.js.map
