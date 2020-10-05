@@ -31,5 +31,8 @@
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": {}
+  "dependencies": {
+    "browserify-fs": "^1.0.0",
+    "jszip": "^3.5.0"
+  }
 }

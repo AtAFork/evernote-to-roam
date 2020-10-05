@@ -12,14 +12,14 @@
 // import * as fs from 'fs';
 
 // @ts-ignore
-import * as fs from 'browserify-fs';
+import { readdir, mkdir } from 'browserify-fs';
 
-import * as moment from 'moment';
+// import * as moment from 'moment';
 
-import * as util from 'util';
+import { promisify } from 'util';
 
-const readdir = util.promisify(fs.readdir);
-const mkdir = util.promisify(fs.mkdir);
+const pReaddir = promisify(readdir);
+const pMkdir = promisify(mkdir);
 
 // import { yarleOptions } from '../yarle';
 
@@ -27,26 +27,30 @@ const FILENAME_LENGTH = 50;
 const FILENAME_DELIMITER = '_';
 
 export const getFileIndex = async (dstPath: string, fileNamePrefix: string): Promise<string | number> => {
-  console.log(dstPath);
-  console.log(fileNamePrefix);
+  /*
+   * console.log(dstPath);
+   * console.log(fileNamePrefix);
+   */
 
   // !!!!!!!!!!! cannot read filter of undefined, print everything that is being passed to readdir
 
-  console.log('does it readdir properly?');
+  // console.log('does it readdir properly?');
 
   let index;
   try {
-    await mkdir(dstPath);
+    await pMkdir(dstPath);
 
-    const files = await readdir(dstPath);
-    // @ts-ignore
+    let files = await pReaddir(dstPath);
+    if (!files) {
+      files = [];
+    }
     index = files.filter((file: string | string[]) => file.indexOf(fileNamePrefix) > -1)
       .length;
 
-    console.log(`index all good: ${index}`);
+    console.log('index all good');
   } catch (error) {
     console.log('hit an issue');
-    console.log(error);
+    // console.log(error);
     index = 0;
   }
   console.log(`index ${index}`);
@@ -64,7 +68,7 @@ export const getResourceFileName = async (workDir: string, resource: any) => {
     fileName = fileNamePrefix.split('.')[0];
   }
 
-  console.log(workDir, fileName);
+  // console.log(workDir, fileName);
 
   const index = await getFileIndex(workDir, fileName);
   const fileNameWithIndex = index > 0 ? `${fileName}.${index}` : fileName;
@@ -108,7 +112,7 @@ export const getExtension = (resource: any): string => {
   return getExtensionFromMime(resource) || getExtensionFromResourceFileName(resource) ||  UNKNOWNEXTENSION;
 };
 
-export const getZettelKastelId = (note: any, dstPath: string): string => moment(note.created).format('YYYYMMDDhhmm');
+// export const getZettelKastelId = (note: any, dstPath: string): string => moment(note.created).format('YYYYMMDDhhmm');
 
 export const getNoteName = async (dstPath: string, note: any): Promise<string> => {
   /*
@@ -128,15 +132,15 @@ export const getNoteName = async (dstPath: string, note: any): Promise<string> =
    */
   const fileNamePrefix = getFilePrefix(note);
 
-  console.log('in getnotename before getting file index');
-  console.log(dstPath, fileNamePrefix);
+  /*
+   * console.log('in getnotename before getting file index');
+   * console.log(dstPath, fileNamePrefix);
+   */
 
   const nextIndex = await getFileIndex(dstPath, fileNamePrefix);
 
   const noteName = nextIndex === 0 ? fileNamePrefix : `${fileNamePrefix}.${nextIndex}`;
   // }
-
-  console.log(`note name ${noteName}`);
 
   return noteName;
 };

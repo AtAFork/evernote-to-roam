@@ -12,31 +12,35 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // import * as fs from 'fs';
 // @ts-ignore
-const fs = require("browserify-fs");
-const moment = require("moment");
-const util = require("util");
-const readdir = util.promisify(fs.readdir);
-const mkdir = util.promisify(fs.mkdir);
+const browserify_fs_1 = require("browserify-fs");
+// import * as moment from 'moment';
+const util_1 = require("util");
+const pReaddir = util_1.promisify(browserify_fs_1.readdir);
+const pMkdir = util_1.promisify(browserify_fs_1.mkdir);
 // import { yarleOptions } from '../yarle';
 const FILENAME_LENGTH = 50;
 const FILENAME_DELIMITER = '_';
 exports.getFileIndex = async (dstPath, fileNamePrefix) => {
-    console.log(dstPath);
-    console.log(fileNamePrefix);
+    /*
+     * console.log(dstPath);
+     * console.log(fileNamePrefix);
+     */
     // !!!!!!!!!!! cannot read filter of undefined, print everything that is being passed to readdir
-    console.log('does it readdir properly?');
+    // console.log('does it readdir properly?');
     let index;
     try {
-        await mkdir(dstPath);
-        const files = await readdir(dstPath);
-        // @ts-ignore
+        await pMkdir(dstPath);
+        let files = await pReaddir(dstPath);
+        if (!files) {
+            files = [];
+        }
         index = files.filter((file) => file.indexOf(fileNamePrefix) > -1)
             .length;
-        console.log(`index all good: ${index}`);
+        console.log('index all good');
     }
     catch (error) {
         console.log('hit an issue');
-        console.log(error);
+        // console.log(error);
         index = 0;
     }
     console.log(`index ${index}`);
@@ -50,7 +54,7 @@ exports.getResourceFileName = async (workDir, resource) => {
         const fileNamePrefix = resource['resource-attributes']['file-name'].substr(0, 50);
         fileName = fileNamePrefix.split('.')[0];
     }
-    console.log(workDir, fileName);
+    // console.log(workDir, fileName);
     const index = await exports.getFileIndex(workDir, fileName);
     const fileNameWithIndex = index > 0 ? `${fileName}.${index}` : fileName;
     return `${fileNameWithIndex}.${extension}`;
@@ -83,7 +87,7 @@ exports.getExtension = (resource) => {
     const UNKNOWNEXTENSION = 'dat';
     return exports.getExtensionFromMime(resource) || exports.getExtensionFromResourceFileName(resource) || UNKNOWNEXTENSION;
 };
-exports.getZettelKastelId = (note, dstPath) => moment(note.created).format('YYYYMMDDhhmm');
+// export const getZettelKastelId = (note: any, dstPath: string): string => moment(note.created).format('YYYYMMDDhhmm');
 exports.getNoteName = async (dstPath, note) => {
     /*
      * let noteName;
@@ -100,12 +104,13 @@ exports.getNoteName = async (dstPath, note) => {
      * } else {
      */
     const fileNamePrefix = exports.getFilePrefix(note);
-    console.log('in getnotename before getting file index');
-    console.log(dstPath, fileNamePrefix);
+    /*
+     * console.log('in getnotename before getting file index');
+     * console.log(dstPath, fileNamePrefix);
+     */
     const nextIndex = await exports.getFileIndex(dstPath, fileNamePrefix);
     const noteName = nextIndex === 0 ? fileNamePrefix : `${fileNamePrefix}.${nextIndex}`;
     // }
-    console.log(`note name ${noteName}`);
     return noteName;
 };
 //# sourceMappingURL=filename-utils.js.map

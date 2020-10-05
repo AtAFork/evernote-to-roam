@@ -6,5 +6,4 @@ export declare const getNoteFileName: (dstPath: string, note: any) => Promise<st
 export declare const getExtensionFromResourceFileName: (resource: any) => string;
 export declare const getExtensionFromMime: (resource: any) => string;
 export declare const getExtension: (resource: any) => string;
-export declare const getZettelKastelId: (note: any, dstPath: string) => string;
 export declare const getNoteName: (dstPath: string, note: any) => Promise<string>;
