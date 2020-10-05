@@ -1,15 +1,10 @@
-<script src="/assets/js/bundle.js"></script>
-Download
-
-
-<a href="allnotes.zip" download="./allnotes.zip"><button>Download!</button></a>
-
-<!-- <button type="submit" onclick="window.open('allnotes.zip')">Download!</button> -->
-<!-- <script src="{{ base.url | prepend: site.url }}/assets/bundle.js"></script> -->
-
 # Free tool.
 ### Suggested price for time saved: 5 cents per note.
 
+
+<div id="input"></div>
+<div id="result"></div>
+<script src="/assets/js/bundle.js"></script>
 <!-- must figure out where the id is in the buttona  -->
 
 <!-- <div id="smart-button-container">

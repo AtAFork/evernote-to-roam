@@ -1,60 +1,61 @@
 // specifically referencing it here so i know i edited the source
-import * as JSZip from 'jszip';
+import JSZip from 'jszip';
 import { writeFile } from 'browserify-fs';
 import { promisify } from 'util';
 import { dropTheRope } from './yarle/dist/yarle.js';
 
 const pWriteFile = promisify(writeFile);
 
+const enexName = 'notes.enex';
+
 const options = {
-  /*
-   * const options: YarleOptions = {
-   * const options: YarleOptions = {
-   */
-  enexFile: 'test2.enex',
+  enexFile: enexName,
   outputDir: './out/',
-  isZettelkastenNeeded: true,
+  isZettelkastenNeeded: false,
+  // keep this false for now so i can comment out moment
   isMetadataNeeded: false,
 };
 
-// need another funciton to handle upload
-
-// !!!!!!! start here next time: plan is to create zip obj, pass it to yarle, do the "adding" to the folder there (like in twoo.file below) so i can skip writing to fs, then return that zip obj and call await generateAsync({type: 'base64'}), then pass result to window.location.href
-
-// trigger this when they press button
-const convert = async () => {
-  // get the uploaded file called *.enex
-  console.log('after droptherope');
+const convert = async (file) => {
+  const buffer = await file.arrayBuffer();
+  await pWriteFile(enexName, buffer);
 
   const zip = new JSZip();
 
-  const twoo = zip.folder('twoo');
-  console.log('before file');
-  twoo.file('Hello.txt', 'Hello World\n');
-
-  /*
-   * const img = zip.folder('images');
-   * img.file('smile.gif', imgData, { base64: true });
-   */
-
-  const content = await zip.generateAsync({ type: 'base64' });
-  console.log(typeof content);
-
-  // async (content) => {
-  console.log('inside then');
-  /*
-   * see FileSaver.js
-   * saveAs(content, 'example.zip');
-   */
-  // await pWriteFile('./allnotes.zip', content);
-  console.log('after zip');
-  // }
-
   // do the conversion
-  zip = await dropTheRope(options);
+  await dropTheRope(options, zip);
+  const content = await zip.generateAsync({ type: 'base64' });
 
   window.location.href = `data:application/zip;base64,${content}`;
 };
 
-convert();
-console.log('hi there adam');
+const uploadFile = (file, i) => {
+  convert(file);
+};
+
+const handleFiles = (e) => {
+  let { target: { files } } = e;
+  files = [...files];
+  files.forEach(uploadFile);
+};
+
+const div = document.createElement('div');
+const form = document.createElement('form');
+form.className = 'my-form';
+const input = document.createElement('input');
+input.type = 'file';
+input.id = 'fileElem';
+input.accept = '.enex';
+input.multiple = true;
+
+input.addEventListener('change', handleFiles);
+form.appendChild(input);
+
+const p = document.createElement('p');
+const text = document.createTextNode('Upload .enex file');
+p.appendChild(text);
+div.appendChild(p);
+div.appendChild(form);
+div.id = 'drop-area';
+const element = document.getElementById('input');
+element.appendChild(div);

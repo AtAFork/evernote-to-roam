@@ -6,15 +6,14 @@
 # https://learnxinyminutes.com/docs/yaml/
 
 title: Privately convert Evernote .enex files to .md files for Roam  (entirely client-side)
-# email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
   Write an awesome description for your new site here. You can edit this
   line in _config.yml. It will appear in your document head meta (for
   Google search results) and in your feed.xml site description.
-# baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
-# twitter_username: jekyllrb
-# github_username:  jekyll
+baseurl: "evernote-to-roam/"
+url: "https://atafork.github.io/"
+twitter_username: adamtzag
+github_username:  atafork
 
 # Build settings
 theme: jekyll-theme-slate
@@ -29,26 +28,6 @@ plugins:
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
-
-# i sidestepped issues with iconv/node-expat etc by commenting out const XmlStream = require("xml-stream") [it wasn't actually required, maintainers commented out where it was used]
-
-# commented out folder-utils.ts, process-resources.ts (since not doing complex ones for now), xml-parser-options
-# removed these dependencies
-    # // "fast-xml-parser": "3.12.5",
-    # // "fs-extra": "4.0.2",
-    # // "he": "1.2.0",
-    # "xml-stream": "^0.4.5"
-
-# removed these dev dependencies
-    # "@types/he": "1.1.1",
-
-    # i then commented out // const absFilePath = utils_1.isComplex(note) ? inside process-node.js inside yarle
-
-# the convert-html-to-md.js in dist/yarle has issue of "is not a constructor"
-# so to fix i rebuilt turndown by doing npm run build-cjs  (the browserify'd version), and replaced the turndown.js in the dist folder with the turndown.browser.cjs.js from the lib folder
-# and then in yarle/dist/utils/turndown-service.js changed `const turndownService = new TurndownService({})` to  `const turndownService = TurndownService.default({})`
-# then finally rebuilt yarle
-
 exclude:
   - .sass-cache/
   - .jekyll-cache/
@@ -65,3 +44,23 @@ exclude:
   - package.json
   - package-lock.json
   - webpack.config.js
+
+
+# i sidestepped issues with iconv/node-expat etc by commenting out const XmlStream = require("xml-stream") [it wasn't actually required, maintainers commented out where it was used]
+
+# commented out folder-utils.ts, process-resources.ts (since not doing complex ones for now), xml-parser-options, droptherope.ts
+# removed other dependencies
+    # // "fast-xml-parser": "3.12.5",
+    # // "fs-extra": "4.0.2",
+    # // "he": "1.2.0",
+    # "xml-stream": "^0.4.5"
+    # moment
+    # "@types/he": "1.1.1",
+
+# commented out // const absFilePath = utils_1.isComplex(note) ? inside process-node.js inside yarle
+
+# the convert-html-to-md.js in dist/yarle has issue of "is not a constructor"
+# so to fix i rebuilt turndown by doing npm run build-cjs  (the browserify'd version), and replaced the turndown.js in the dist folder with the turndown.browser.cjs.js from the lib folder
+# and then in yarle/dist/utils/turndown-service.js changed `const turndownService = new TurndownService({})` to  `const turndownService = TurndownService.default({})`
+# then finally rebuilt yarle
+

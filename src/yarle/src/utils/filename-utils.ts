@@ -9,72 +9,54 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable prefer-named-capture-group */
 
-// import * as fs from 'fs';
-
-// @ts-ignore
-import { readdir, mkdir } from 'browserify-fs';
-
-// import * as moment from 'moment';
-
-import { promisify } from 'util';
-
-const pReaddir = promisify(readdir);
-const pMkdir = promisify(mkdir);
-
-// import { yarleOptions } from '../yarle';
+import * as JSZip from 'jszip';
 
 const FILENAME_LENGTH = 50;
 const FILENAME_DELIMITER = '_';
 
-export const getFileIndex = async (dstPath: string, fileNamePrefix: string): Promise<string | number> => {
-  /*
-   * console.log(dstPath);
-   * console.log(fileNamePrefix);
-   */
-
-  // !!!!!!!!!!! cannot read filter of undefined, print everything that is being passed to readdir
-
-  // console.log('does it readdir properly?');
-
-  let index;
-  try {
-    await pMkdir(dstPath);
-
-    let files = await pReaddir(dstPath);
-    if (!files) {
-      files = [];
+export const getFileIndex = (fileNamePrefix: string, zip: JSZip): number => {
+  // i can do fil index by just filtering the result of zip.folder
+  let index = 0;
+  zip.folder('notes').forEach((relativePath: string, file: JSZip.JSZipObject): void => {
+    if (file.name.indexOf(fileNamePrefix) > -1) {
+      // eslint-disable-next-line no-plusplus
+      index++;
     }
-    index = files.filter((file: string | string[]) => file.indexOf(fileNamePrefix) > -1)
-      .length;
-
-    console.log('index all good');
-  } catch (error) {
-    console.log('hit an issue');
-    // console.log(error);
-    index = 0;
-  }
-  console.log(`index ${index}`);
+  });
   return index;
 };
-export const getResourceFileName = async (workDir: string, resource: any) => {
-  const UNKNOWNFILENAME = 'unknown_filename';
 
-  const extension = getExtension(resource);
-  let fileName = UNKNOWNFILENAME;
+/*
+ * export const getResourceFileName = async (workDir: string, resource: any) => {
+ *   const UNKNOWNFILENAME = 'unknown_filename';
+ */
 
-  if (resource['resource-attributes'] && resource['resource-attributes']['file-name']) {
-    const fileNamePrefix = resource['resource-attributes']['file-name'].substr(0, 50);
+/*
+ *   const extension = getExtension(resource);
+ *   let fileName = UNKNOWNFILENAME;
+ */
 
-    fileName = fileNamePrefix.split('.')[0];
-  }
+/*
+ *   if (resource['resource-attributes'] && resource['resource-attributes']['file-name']) {
+ *     const fileNamePrefix = resource['resource-attributes']['file-name'].substr(0, 50);
+ */
 
-  // console.log(workDir, fileName);
+/*
+ *     fileName = fileNamePrefix.split('.')[0];
+ *   }
+ */
 
-  const index = await getFileIndex(workDir, fileName);
-  const fileNameWithIndex = index > 0 ? `${fileName}.${index}` : fileName;
+/*
+ *   if i implement this i need to pass jszip to getresourcefilename and then pass jszip here
+ *   getFileIndex(fileNamePrefix, zip);
+ *   const index = getFileIndex(workDir, fileName);
+ *   const fileNameWithIndex = index > 0 ? `${fileName}.${index}` : fileName;
+ */
 
-  return `${fileNameWithIndex}.${extension}`;
-};
+/*
+ *   return `${fileNameWithIndex}.${extension}`;
+ * };
+ */
 
 export const getFilePrefix = (note: any): string => {
   const cutName = (note.title ? `${note.title.toString()}` : 'Untitled').substring(0, FILENAME_LENGTH);
@@ -84,7 +66,7 @@ export const getFilePrefix = (note: any): string => {
 export const makeFilePrefixOsCompatible = (name: string): string => name.replace(/(\!|\.|\;|\:|\<|\>|\"|\\|\/|\||\*|\?)/g, FILENAME_DELIMITER);
 
 // eslint-disable-next-line require-await
-export const getNoteFileName = async (dstPath: string, note: any): Promise<string> => `${await getNoteName(dstPath, note)}.md`;
+export const getNoteFileName = (note: any, zip: JSZip): string => `${getNoteName(note, zip)}.md`;
 
 export const getExtensionFromResourceFileName = (resource: any): string => {
   if (!(resource['resource-attributes']
@@ -114,33 +96,11 @@ export const getExtension = (resource: any): string => {
 
 // export const getZettelKastelId = (note: any, dstPath: string): string => moment(note.created).format('YYYYMMDDhhmm');
 
-export const getNoteName = async (dstPath: string, note: any): Promise<string> => {
-  /*
-   * let noteName;
-   * if (yarleOptions.isZettelkastenNeeded) {
-   *   const zettelPrefix = getZettelKastelId(note, dstPath);
-   *   const nextIndex = await getFileIndex(dstPath, zettelPrefix);
-   *   const separator = ' ';
-   *   noteName = nextIndex !== 0
-   *     ? `${zettelPrefix}.${nextIndex}`
-   *     : zettelPrefix;
-   */
-
-  /*
-   *   noteName += getFilePrefix(note).toLowerCase() !== 'untitled' ? `${separator}${getFilePrefix(note)}` : '';
-   * } else {
-   */
+export const getNoteName = (note: any, zip: JSZip): string => {
   const fileNamePrefix = getFilePrefix(note);
 
-  /*
-   * console.log('in getnotename before getting file index');
-   * console.log(dstPath, fileNamePrefix);
-   */
-
-  const nextIndex = await getFileIndex(dstPath, fileNamePrefix);
-
+  const nextIndex = getFileIndex(fileNamePrefix, zip);
   const noteName = nextIndex === 0 ? fileNamePrefix : `${fileNamePrefix}.${nextIndex}`;
-  // }
 
   return noteName;
 };

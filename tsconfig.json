@@ -24,7 +24,7 @@
         */
     },
     "include": [
-        "src/**/*"
+        "src/**/*", "assets/js/uploader.js"
         // "tsconfig.json",
         // "server.ts"
     ],
