@@ -2,6 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("./utils");
+// getMetadata, getNoteContent, getTitle, isComplex, logTags, getNoteFileName,
 // import { yarleOptions } from './yarle';
 const convert_html_to_md_1 = require("./convert-html-to-md");
 exports.processNode = (note, zip, failArr) => {
@@ -16,12 +17,11 @@ exports.processNode = (note, zip, failArr) => {
          *   data += logTags(note);
          * }
          */
-        if (utils_1.isComplex(note)) {
-            console.log('Failed to process, too complex');
-            failArr.push(title);
-            return;
-            // content = processResources(note, content);
-        }
+        /*
+         * if (isComplex(note)) {
+         *   // content = processResources(note, content);
+         * }
+         */
         const markdown = convert_html_to_md_1.convertHtml2Md(content);
         data += markdown;
         /*

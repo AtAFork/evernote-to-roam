@@ -49,7 +49,8 @@ exports.parseStream = async (options, zip) => {
             const div = document.getElementById('result');
             let result;
             if (failArr.length > 0) {
-                result = `The following notes failed to convert (either too complex e.g. with image attachments or another error):\n\n${failArr}`;
+                result = `The following notes failed to convert:
+        ${failArr}`;
             }
             else {
                 result = 'Hooray! All notes were converted, enjoy!';

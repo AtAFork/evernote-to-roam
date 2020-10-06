@@ -2,10 +2,9 @@
 
 import * as JSZip from 'jszip';
 
-import {
-  getNoteContent, getTitle, isComplex, getNoteFileName,
-  // getMetadata, getNoteContent, getTitle, isComplex, logTags, getNoteFileName,
-} from './utils';
+import { getNoteContent, getTitle, getNoteFileName } from './utils';
+// getMetadata, getNoteContent, getTitle, isComplex, logTags, getNoteFileName,
+
 // import { yarleOptions } from './yarle';
 import { convertHtml2Md } from './convert-html-to-md';
 
@@ -24,12 +23,11 @@ export const processNode = (note: any, zip: JSZip, failArr: (string | number)[])
      *   data += logTags(note);
      * }
      */
-    if (isComplex(note)) {
-      console.log('Failed to process, too complex');
-      failArr.push(title);
-      return;
-      // content = processResources(note, content);
-    }
+    /*
+     * if (isComplex(note)) {
+     *   // content = processResources(note, content);
+     * }
+     */
     const markdown = convertHtml2Md(content);
 
     data += markdown;

@@ -39,23 +39,31 @@ const handleFiles = (e) => {
   files.forEach(uploadFile);
 };
 
-const div = document.createElement('div');
-const form = document.createElement('form');
-form.className = 'my-form';
-const input = document.createElement('input');
-input.type = 'file';
-input.id = 'fileElem';
-input.accept = '.enex';
-input.multiple = true;
+const setup = () => {
+  // if (!document.getElementById('fileElem')) {
+  const div = document.createElement('div');
 
-input.addEventListener('change', handleFiles);
-form.appendChild(input);
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.id = 'fileElem';
+  input.accept = '.enex';
+  input.multiple = true;
+  input.addEventListener('change', handleFiles);
 
-const p = document.createElement('p');
-const text = document.createTextNode('Upload .enex file');
-p.appendChild(text);
-div.appendChild(p);
-div.appendChild(form);
-div.id = 'drop-area';
-const element = document.getElementById('input');
-element.appendChild(div);
+  const form = document.createElement('form');
+  form.appendChild(input);
+  form.id = 'form-id';
+  div.appendChild(form);
+
+  const h3 = document.createElement('h3');
+  h3.style = 'margin-left: 10px';
+  const text = document.createTextNode('Upload .enex file');
+  h3.appendChild(text);
+  div.appendChild(h3);
+
+  const element = document.getElementById('input');
+  element.appendChild(div);
+  // }
+};
+
+setup();
