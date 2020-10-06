@@ -1,5 +1,4 @@
 /* eslint-disable import/prefer-default-export */
-
 import * as JSZip from 'jszip';
 
 import { getNoteContent, getTitle, getNoteFileName } from './utils';

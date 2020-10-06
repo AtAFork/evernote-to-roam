@@ -2,7 +2,6 @@
 import JSZip from 'jszip';
 import { writeFile } from 'browserify-fs';
 import { promisify } from 'util';
-import { link } from 'fs';
 import { dropTheRope } from './yarle/dist/yarle.js';
 
 const pWriteFile = promisify(writeFile);
