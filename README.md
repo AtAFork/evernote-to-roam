@@ -1,4 +1,4 @@
-# Project to convert Evernote .enex to .md for use in Roam Research
+# [Project to convert Evernote .enex to .md for use in Roam Research](https://atafork.github.io/evernote-to-roam/)
 
 # Adjustments made to the yarle package:
 - i sidestepped issues with iconv/node-expat etc by commenting out const XmlStream = require("xml-stream") [it wasn't actually required, maintainers commented out where it was used]
