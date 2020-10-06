@@ -1,7 +1,5 @@
 ---
-layout: page
-title: Convert Evernote to Roam Research
-permalink: /
+layout: default
 ---
 
 <h4>See <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-export-content-from-Evernote" target="_blank">this article</a> for how to export notes from Evernote.</h4>
