@@ -18,7 +18,7 @@ module.exports = {
    */
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, './assets/js'),
+    path: path.resolve(__dirname, './evernote-to-roam/assets/js'),
     filename: 'bundle.js',
   },
 };
