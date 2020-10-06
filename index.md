@@ -29,9 +29,9 @@
 <br/>
 
 <div style = "border-radius: 10px; border: 6px solid black">
+<div id="result" style = "margin-left: 20px; margin-top: 10px;"></div>
 <div id="input"></div>
-<div id="result"></div>
-<script src="/assets/js/bundle.js"></script>
+<script src="/evernote-to-roam/assets/js/bundle.js"></script>
 </div>
 
 **Note**: Github could (in theory) still peak at your notes, so for the extra paranoid you can save the website to your desktop, double click on the html file, and use as normal.

@@ -2,6 +2,7 @@
 import JSZip from 'jszip';
 import { writeFile } from 'browserify-fs';
 import { promisify } from 'util';
+import { link } from 'fs';
 import { dropTheRope } from './yarle/dist/yarle.js';
 
 const pWriteFile = promisify(writeFile);
@@ -26,7 +27,23 @@ const convert = async (file) => {
   await dropTheRope(options, zip);
   const content = await zip.generateAsync({ type: 'base64' });
 
-  window.location.href = `data:application/zip;base64,${content}`;
+  const resultDiv = document.getElementById('result');
+  const aId = 'downloadButton';
+  const buttonExists = document.getElementById(aId);
+  if (buttonExists) {
+    buttonExists.remove();
+  }
+  const a = document.createElement('a');
+  a.setAttribute('id', aId);
+  a.setAttribute('href', `data:application/zip;base64,${content}`);
+  // a.target = '_blank';
+  a.setAttribute('download', 'converted_notes.zip');
+
+  const button = document.createElement('button');
+  const text = document.createTextNode('Download .md files');
+  button.appendChild(text);
+  a.appendChild(button);
+  resultDiv.prepend(a);
 };
 
 const uploadFile = (file, i) => {
@@ -39,31 +56,44 @@ const handleFiles = (e) => {
   files.forEach(uploadFile);
 };
 
-const setup = () => {
-  // if (!document.getElementById('fileElem')) {
-  const div = document.createElement('div');
+const favicon = () => {
+  const head = document.querySelector('head');
+  const fav = document.createElement('link');
+  fav.setAttribute('rel', 'shortcut icon');
+  fav.setAttribute('href', '/evernote-to-roam/favicon.ico');
+  head.appendChild(fav);
+};
 
+const setup = () => {
+  favicon();
+
+  const divId = 'e2r-container';
+  const divExists = document.getElementById(divId);
+  if (divExists) {
+    divExists.remove();
+  }
+  const div = document.createElement('div');
+  div.setAttribute('id', divId);
   const input = document.createElement('input');
-  input.type = 'file';
-  input.id = 'fileElem';
-  input.accept = '.enex';
-  input.multiple = true;
+  input.setAttribute('type', 'file');
+  input.setAttribute('id', 'fileElem');
+  input.setAttribute('accept', '.enex');
+  input.setAttribute('multiple', true);
   input.addEventListener('change', handleFiles);
 
-  const form = document.createElement('form');
-  form.appendChild(input);
-  form.id = 'form-id';
-  div.appendChild(form);
-
   const h3 = document.createElement('h3');
-  h3.style = 'margin-left: 10px';
+  h3.setAttribute('style', 'margin-left: 20px');
   const text = document.createTextNode('Upload .enex file');
   h3.appendChild(text);
   div.appendChild(h3);
 
+  const form = document.createElement('form');
+  form.appendChild(input);
+  form.setAttribute('id', 'form-id');
+  div.appendChild(form);
+
   const element = document.getElementById('input');
   element.appendChild(div);
-  // }
 };
 
 setup();

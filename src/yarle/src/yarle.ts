@@ -15,6 +15,8 @@ export let yarleOptions: YarleOptions = {
   plainTextNotesOnly: false,
 };
 
+const progressId = 'progressBarE2R';
+
 const setOptions = (options: YarleOptions): void => {
   yarleOptions = { ...yarleOptions, ...options };
 };
@@ -23,15 +25,15 @@ export const parseStream = async (options: YarleOptions, zip: JSZip): Promise<vo
   const stream = createReadStream(options.enexFile);
   /*
    * const xml = new XmlStream(stream);
-   * let noteNumber = 0;
    * const failed = 0;
-   * const totalNotes = 0;
    */
   const failArr: (string | number)[] | PromiseLike<(string | number)[]> = [];
 
   const xmlStream = await flow(stream);
 
   return new Promise((resolve, reject) => {
+    // let totalNotes = 0;
+    let noteNumber = 0;
     const logAndReject = (error: Error) => {
       console.log(`Could not convert ${options.enexFile}:\n${error.message}`);
       // eslint-disable-next-line no-plusplus
@@ -40,16 +42,33 @@ export const parseStream = async (options: YarleOptions, zip: JSZip): Promise<vo
       return reject();
     };
     xmlStream.on('tag:en-export', (enExport: any) => {
+      /*
+       * if (!totalNotes) {
+       * console.log(`enExport.note.length:`);
+       * console.log(enExport.note.length);
+       */
       // eslint-disable-next-line no-ternary
-      // totalNotes = Array.isArray(enExport.note) ? enExport.note.length : 1;
+      /*
+       * totalNotes = Array.isArray(enExport.note) ? enExport.note.length : 1;
+       * }
+       */
     });
     xmlStream.on('tag:note', (note: any) => {
       processNode(note, zip, failArr);
       // eslint-disable-next-line no-plusplus
-      /*
-       * ++noteNumber;
-       * console.log(`Notes processed: ${noteNumber}`);
-       */
+      // eslint-disable-next-line no-plusplus
+      noteNumber++;
+      const resultDiv = document.getElementById('result');
+      let progress = document.getElementById(progressId);
+      if (!progress) {
+        progress = document.createElement('progress');
+        progress.setAttribute('id', progressId);
+
+        progress.setAttribute('max', `${Math.log(2000)}`);
+        // progress.setAttribute('max', `${totalNotes}`);
+        resultDiv.prepend(progress);
+      }
+      progress.setAttribute('value', `${Math.min(Math.log(2000 - 1), Math.log(noteNumber))}`);
     });
     xmlStream.on('end', () => {
       const div = document.getElementById('result');
@@ -60,6 +79,9 @@ export const parseStream = async (options: YarleOptions, zip: JSZip): Promise<vo
       } else {
         result = 'Hooray! All notes were converted, enjoy!';
       }
+      const progress = document.getElementById(progressId);
+      progress.setAttribute('value', `${Math.log(2000)}`);
+
       const p = document.createElement('p');
       const text = document.createTextNode(result);
       p.appendChild(text);
