@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 <h4>See <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-export-content-from-Evernote" target="_blank">this article</a> for how to export notes from Evernote.</h4>
 <div style = "border-radius: 10px; border: 6px solid #85bb65;">
 <h3 style="margin-left: 10px" >Suggested price for time saved:</h3>
