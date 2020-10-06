@@ -8,7 +8,7 @@
 title: Convert Evernote to Roam Research
 description: 
   Free and private conversion from .enex to .md. This tool runs only in your browser - no servers involved.
-baseurl: "/evernote-to-roam"
+baseurl: ""
 url: ""
 twitter_username: adamtzag
 github_username: atafork
